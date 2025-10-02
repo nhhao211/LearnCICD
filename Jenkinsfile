@@ -34,16 +34,16 @@ pipeline {
 
         stage('Docker Build') {
             steps {
-                bat 'docker build -t learnCICD:%BUILD_NUMBER% .'
+                bat 'docker build -t learncicd:%BUILD_NUMBER% .'
             }
         }
 
         stage('Deploy') {
             steps {
                 bat '''
-                    docker stop shop-manager || exit 0
-                    docker rm shop-manager || exit 0
-                    docker run -d -p 8080:8080 --name shop-manager shop-manager:%BUILD_NUMBER%
+                    docker stop learncicd || exit 0
+                    docker rm learncicd || exit 0
+                    docker run -d -p 8080:8080 --name learncicd learncicd:%BUILD_NUMBER%
                 '''
             }
         }
