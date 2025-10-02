@@ -17,13 +17,13 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh 'mvn clean package -DskipTests'
+                bat 'mvn clean package -DskipTests'
             }
         }
 
         stage('Test') {
             steps {
-                sh 'mvn test'
+                bat 'mvn test'
             }
             post {
                 always {
@@ -35,16 +35,18 @@ pipeline {
         stage('Docker Build') {
             steps {
                 script {
-                    sh 'docker build -t shop-manager:${BUILD_NUMBER} .'
+                    bat 'docker build -t shop-manager:${BUILD_NUMBER} .'
                 }
             }
         }
 
         stage('Deploy') {
             steps {
-                sh 'docker stop shop-manager || true'
-                sh 'docker rm shop-manager || true'
-                sh 'docker run -d -p 8080:8080 --name shop-manager shop-manager:${BUILD_NUMBER}'
+                bat '''
+                     docker stop shop-manager || exit 0
+                     docker rm shop-manager || exit 0
+                     docker run -d -p 8080:8080 --name shop-manager shop-manager:%BUILD_NUMBER%
+                    '''
             }
         }
     }
