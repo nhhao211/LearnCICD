@@ -9,7 +9,9 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/username/your-repo.git'
+                git branch: 'main',
+                    url: 'https://github.com/nhhao211/LearnCICD.git',
+                    credentialsId: 'github-token'
             }
         }
 
