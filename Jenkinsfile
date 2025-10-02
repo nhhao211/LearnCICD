@@ -11,7 +11,7 @@ pipeline {
             steps {
                 git branch: 'main',
                     url: 'https://github.com/nhhao211/LearnCICD.git',
-                    credentialsId: 'github-token'
+                    credentialsId: 'nhhao211'
             }
         }
 
