@@ -41,9 +41,21 @@ pipeline {
         stage('Deploy') {
             steps {
                 bat '''
-                    docker stop learncicd || exit 0
-                    docker rm learncicd || exit 0
-                    docker run -d -p 8080:8080 --name learncicd learncicd:%BUILD_NUMBER%
+                    echo "Stopping existing container..."
+                    docker stop learncicd 2>nul || echo "No container to stop"
+                    docker rm learncicd 2>nul || echo "No container to remove"
+
+                    echo "Starting new container on port 8081..."
+                    docker run -d -p 8081:8080 --name learncicd learncicd:%BUILD_NUMBER%
+
+                    echo "Checking running containers..."
+                    docker ps
+
+                    echo "Waiting 10 seconds for app to start..."
+                    timeout /t 10 /nobreak
+
+                    echo "Checking container logs..."
+                    docker logs learncicd
                 '''
             }
         }
